@@ -93,7 +93,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     eprintln!(
         "Writing the system dictionary in zstd...: {:?}",
-        &args.sysdic_out
+        args.sysdic_out
     );
     let mut f = zstd::Encoder::new(File::create(args.sysdic_out)?, 19)?;
     dict.write(&mut f)?;
