@@ -25,9 +25,16 @@ jobs:
         tar xf ./bccwj-suw+unidic-cwj-3_1_1-extracted+compact.tar.xz
         mv ./bccwj-suw+unidic-cwj-3_1_1-extracted+compact/system.dic.zst ./src/
     - name: Install environment
+      env:
+        TRUNK_VERSION: v0.21.14
+        TRUNK_SHA256: f2b4680cd239693a646a2795e4633c625328d7b2a044fbe749fa3a2fe9e7036b
       run: |
         rustup target add wasm32-unknown-unknown
-        cargo install trunk
+        wget -qO "${RUNNER_TEMP}/trunk.tar.gz" \
+          "https://github.com/trunk-rs/trunk/releases/download/${TRUNK_VERSION}/trunk-x86_64-unknown-linux-gnu.tar.gz"
+        echo "${TRUNK_SHA256}  ${RUNNER_TEMP}/trunk.tar.gz" | sha256sum --check --strict
+        tar -xzf "${RUNNER_TEMP}/trunk.tar.gz" -C "$HOME/.cargo/bin" trunk
+        trunk --version
     - name: Build
       working-directory: ./examples/wasm
       run: trunk build --release
