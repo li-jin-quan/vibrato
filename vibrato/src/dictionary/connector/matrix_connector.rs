@@ -32,9 +32,9 @@ impl MatrixConnector {
         let mut lines = reader.lines();
 
         let (num_right, num_left) = Self::parse_header(&lines.next().unwrap()?)?;
-        let len = num_right
-            .checked_mul(num_left)
-            .ok_or_else(|| VibratoError::invalid_format("matrix.def", "matrix size is too large."))?;
+        let len = num_right.checked_mul(num_left).ok_or_else(|| {
+            VibratoError::invalid_format("matrix.def", "matrix size is too large.")
+        })?;
         let mut data = Vec::new();
         // Do not reserve memory based only on the untrusted header before
         // validating that the allocation is actually attainable, because
